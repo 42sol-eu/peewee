@@ -40,7 +40,7 @@ data model, by defining one or more :py:class:`Model` classes:
 
     from peewee import *
 
-    db = SqliteDatabase('people.db')
+    db = SqliteDatabase(None) # connection will be done in init
 
     class Person(Model):
         name = CharField()
@@ -50,10 +50,21 @@ data model, by defining one or more :py:class:`Model` classes:
         class Meta:
             database = db # This model uses the "people.db" database.
 
+    def init(name): 
+      global db
+      db.init(name)
+
+    if __name__=='__main__':
+      init('people.db')   # Define database name
+
 .. note::
     Note that we named our model ``Person`` instead of ``People``. This is a
     convention you should follow -- even though the table will contain multiple
     people, we always name the class using the singular form.
+
+.. note::
+    If the name of the database is fixed, it may be defined like this ``db = SqliteDatabase('people.db')``.
+    
 
 There are lots of :ref:`field types <fields>` suitable for storing various
 types of data. Peewee handles converting between *pythonic* values those used
